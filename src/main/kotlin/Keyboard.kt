@@ -14,7 +14,7 @@ fun Keyboard(colors: Map<Char, Color>, enter: () -> Unit, action: (Char) -> Unit
     val lastRow = "zxcvbnm"
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize()
     ) {
         chars.forEach { rowChars ->
             Row(
@@ -36,7 +36,7 @@ fun Keyboard(colors: Map<Char, Color>, enter: () -> Unit, action: (Char) -> Unit
             Button(
                 onClick = { enter() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
-                modifier = Modifier.fillMaxHeight().width(90.dp).padding(1.dp)
+                modifier = Modifier.fillMaxHeight().aspectRatio(2f).padding(1.dp).widthIn(max=50.dp)
             ) {
                 Text("Enter")
             }
@@ -49,7 +49,7 @@ fun KeyboardKey(c: Char, color: Color, action: (Char) -> Unit) {
     Button(
         onClick = { action(c) },
         colors = ButtonDefaults.buttonColors(backgroundColor = color),
-        modifier = Modifier.fillMaxHeight().width(60.dp).padding(1.dp)
+        modifier = Modifier.fillMaxHeight().aspectRatio(1.25f).padding(1.dp)
     ) {
         Text(c.toString())
     }
