@@ -12,18 +12,22 @@ import androidx.compose.ui.Modifier
 import ui.EndScreen
 import ui.GameBoard
 import ui.Keyboard
+import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
-val solution_list = getResource("wordlists/solution_list.txt")!!.split("\r\n")
-val valid_list = getResource("wordlists/valid_list.txt")!!.split("\r\n") + solution_list
+val solution_list = getResource("wordlists/solution_list.txt")!!.readText().split("\r\n")
+val valid_list = getResource("wordlists/valid_list.txt")!!.readText().split("\r\n") + solution_list
 
 val target = solution_list.random().uppercase()
 
 val game = WordleGame(target)
 
-fun getResource(path: String) = object {}::class.java.getResource(path)?.readText()
+fun getResource(path: String) = object {}::class.java.getResource(path)
 
-fun main() = Window {
+fun main() = Window(
+    title = "Wordle",
+    icon = ImageIO.read(getResource("icons/wordle.png")),
+) {
     var guesses by remember { mutableStateOf(listOf<String>()) }
 
     var warningText by remember { mutableStateOf("") }
