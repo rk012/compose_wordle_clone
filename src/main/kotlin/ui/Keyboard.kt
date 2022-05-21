@@ -21,7 +21,7 @@ fun Keyboard(colors: Map<Char, Color>, enter: () -> Unit, action: (Char) -> Unit
                 modifier = Modifier.weight(1f).align(Alignment.CenterHorizontally)
             ) {
                 rowChars.forEach {
-                    KeyboardKey(it, colors[it] ?: Color.Gray, action)
+                    KeyboardKey(it, colors[it] ?: Color.LightGray, action)
                 }
             }
         }
@@ -30,12 +30,12 @@ fun Keyboard(colors: Map<Char, Color>, enter: () -> Unit, action: (Char) -> Unit
             modifier = Modifier.weight(1f).align(Alignment.CenterHorizontally)
         ) {
             lastRow.forEach {
-                KeyboardKey(it, colors[it] ?: Color.Gray, action)
+                KeyboardKey(it, colors[it] ?: Color.LightGray, action)
             }
 
             Button(
                 onClick = { enter() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Gray),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
                 modifier = Modifier.fillMaxHeight().aspectRatio(2f).padding(1.dp).widthIn(max=50.dp)
             ) {
                 Text("Enter")

@@ -9,12 +9,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GameBoard(words: List<String>, currentWord: String) {
+fun GameBoard(words: List<String>, colors: List<List<Color>>) {
     Column(
         modifier = Modifier.fillMaxHeight().aspectRatio(5/6f)
     ) {
-        words.forEach {
-            WordRow(it)
+        words.forEachIndexed { i, s ->
+            if (i < colors.size)
+                WordRow(s, colors[i])
+            else
+                WordRow(s)
         }
     }
 }

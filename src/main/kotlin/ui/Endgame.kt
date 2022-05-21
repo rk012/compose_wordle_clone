@@ -6,16 +6,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun BoxScope.EndScreen(win: Boolean, exit: () -> Unit) {
     Box(
-        modifier = Modifier.fillMaxWidth(.4f).aspectRatio(1f).background(Color.Yellow).align(Alignment.Center)
+        modifier = Modifier.fillMaxSize().background(Color(1f, 1f, 0f, 0.5f)).align(Alignment.Center)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center)
         ) {
-            Text("You ${if (win) "win" else "lose"}!")
+            Text("You ${if (win) "win" else "lose"}!", textAlign = TextAlign.Center)
             Button(
                 onClick = exit
             ) {

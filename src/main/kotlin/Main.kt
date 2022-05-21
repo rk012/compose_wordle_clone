@@ -6,13 +6,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import kotlin.system.exitProcess
 
+val target = "kazoo"
+val game = WordleGame(target)
+
 fun main() = Window {
-    val colors = mapOf<Char, Color>()
-    var text by remember { mutableStateOf("") }
+
+    var guesses by remember { mutableStateOf(listOf<String>()) }
+
+    var currentWord by remember { mutableStateOf("") }
     var finished by remember { mutableStateOf(false) }
+    var win by remember { mutableStateOf(true) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -20,16 +25,43 @@ fun main() = Window {
         Row(
             modifier = Modifier.align(Alignment.TopCenter).fillMaxHeight(.7f)
         ) {
-            GameBoard(listOf("raise", "juicy", text, "", "", ""), text)
+            GameBoard(guesses.padEnd(6, currentWord, ""), game.results.map { l -> l.map { it.color } })
         }
         Row(
             modifier = Modifier.align(Alignment.BottomCenter).fillMaxHeight(.2f)
         ) {
-            Keyboard(colors, enter = { text = ""; finished = !finished }) { text += it.toString() }
+            Keyboard(
+                game.charColors.mapValues { it.value.color },
+                enter = {
+                    if (currentWord.length == 5) {
+                        val results = game.addGuess(currentWord)
+
+                        guesses = game.guesses
+                        currentWord = ""
+
+                        if (game.guesses.size == 6) {
+                            win = false
+                            finished = true
+                        }
+
+                        if (results.all { it == WordleGame.Results.MATCHES }) {
+                            win = true
+                            finished = true
+                        }
+                    }
+                }
+            ) {
+                currentWord = (currentWord + it).take(5)
+            }
         }
 
         if (finished) {
-            EndScreen(true) { exitProcess(0) }
+            EndScreen(win) { exitProcess(0) }
         }
     }
 }
+
+fun List<String>.padEnd(n: Int, currentWord: String, value: String): List<String> =
+    if (size == n - 1) this + listOf(currentWord)
+    else if (size == n) this
+    else this + listOf(currentWord) + List(n - 1 - size) { value }
