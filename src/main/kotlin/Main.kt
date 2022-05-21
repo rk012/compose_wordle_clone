@@ -1,5 +1,8 @@
 import androidx.compose.desktop.Window
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,6 +23,8 @@ fun getResource(path: String) = object {}::class.java.getResource(path)?.readTex
 fun main() = Window {
     var guesses by remember { mutableStateOf(listOf<String>()) }
 
+    var warningText by remember { mutableStateOf("") }
+
     var currentWord by remember { mutableStateOf("") }
     var finished by remember { mutableStateOf(false) }
     var win by remember { mutableStateOf(true) }
@@ -30,7 +35,7 @@ fun main() = Window {
         Row(
             modifier = Modifier.align(Alignment.TopCenter).fillMaxHeight(.7f)
         ) {
-            GameBoard(guesses.padEnd(6, currentWord, ""), game.results.map { l -> l.map { it.color } })
+            GameBoard(guesses.padEnd(6, currentWord, ""), game.results.map { l -> l.map { it.color } }, warningText)
         }
         Row(
             modifier = Modifier.align(Alignment.BottomCenter).fillMaxHeight(.2f)
@@ -38,7 +43,13 @@ fun main() = Window {
             Keyboard(
                 game.charColors.mapValues { it.value.color },
                 enter = {
-                    if (currentWord.length == 5 && currentWord.lowercase() in valid_list) {
+                    if (currentWord.length != 5) {
+                        warningText = "Not enough letters"
+                    } else if (currentWord.lowercase() !in valid_list) {
+                        warningText = "Not a valid word"
+                    } else {
+                        warningText = ""
+
                         val results = game.addGuess(currentWord)
 
                         guesses = game.guesses

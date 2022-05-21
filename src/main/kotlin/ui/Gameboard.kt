@@ -6,13 +6,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GameBoard(words: List<String>, colors: List<List<Color>>) {
+fun GameBoard(words: List<String>, colors: List<List<Color>>, warningText: String) {
     Column(
-        modifier = Modifier.fillMaxHeight().aspectRatio(5/6f)
+        modifier = Modifier.fillMaxHeight().aspectRatio(10/13f)
     ) {
+        Text(warningText, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = Color.Red)
         words.forEachIndexed { i, s ->
             if (i < colors.size)
                 WordRow(s, colors[i])
@@ -25,7 +27,7 @@ fun GameBoard(words: List<String>, colors: List<List<Color>>) {
 @Composable
 fun ColumnScope.WordRow(word: String, colors: List<Color> = List(5) { Color.LightGray }) {
     Row(
-        modifier = Modifier.fillMaxHeight().weight(1f)
+        modifier = Modifier.fillMaxHeight().weight(2f)
     ) {
         word.padEnd(5).forEachIndexed { i, c ->
             LetterTile(c, colors[i])
