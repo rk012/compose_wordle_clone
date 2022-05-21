@@ -10,11 +10,11 @@ class WordleGame(private val target: String, val guesses: MutableList<String> = 
     val charColors: MutableMap<Char, Results> = mutableMapOf()
 
     val results: List<List<Results>>
-        get() = guesses.map { getFilter(it) }
+        get() = guesses.map { getFilter(it, target) }
 
     fun addGuess(guess: String): List<Results> {
         guesses.add(guess)
-        val filter = getFilter(guess)
+        val filter = getFilter(guess, target)
 
         guess.forEachIndexed { i, c ->
             if (filter[i] == Results.MATCHES)
@@ -28,7 +28,7 @@ class WordleGame(private val target: String, val guesses: MutableList<String> = 
         return filter
     }
 
-    fun getFilter(input: String): List<Results> {
+    fun getFilter(input: String, target: String): List<Results> {
         val filter = MutableList(5) { Results.NONE }
 
         val letterCount = mutableMapOf<Char, Int>()
