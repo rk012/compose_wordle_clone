@@ -49,6 +49,9 @@ fun main() = Window {
                             finished = true
                         }
                     }
+                },
+                backspace = {
+                    currentWord = currentWord.dropLast(1)
                 }
             ) {
                 currentWord = (currentWord + it).take(5)
