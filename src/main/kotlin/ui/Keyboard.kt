@@ -17,8 +17,8 @@ fun Keyboard(
     backspace: () -> Unit,
     action: (Char) -> Unit
 ) {
-    val chars = listOf("qwertyuiop", "asdfghjkl")
-    val lastRow = "zxcvbnm"
+    val chars = listOf("QWERTYUIOP", "ASDFGHJKL")
+    val lastRow = "ZXCVBNM"
 
     Column(
         modifier = Modifier.fillMaxSize()

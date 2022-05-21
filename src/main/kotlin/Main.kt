@@ -8,11 +8,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlin.system.exitProcess
 
-val target = "kazoo"
+val solution_list = getResource("wordlists/solution_list.txt")!!.split("\r\n")
+val valid_list = getResource("wordlists/valid_list.txt")!!.split("\r\n") + solution_list
+
+val target = solution_list.random().uppercase()
+
 val game = WordleGame(target)
 
-fun main() = Window {
+fun getResource(path: String) = object {}::class.java.getResource(path)?.readText()
 
+fun main() = Window {
     var guesses by remember { mutableStateOf(listOf<String>()) }
 
     var currentWord by remember { mutableStateOf("") }
@@ -33,7 +38,7 @@ fun main() = Window {
             Keyboard(
                 game.charColors.mapValues { it.value.color },
                 enter = {
-                    if (currentWord.length == 5) {
+                    if (currentWord.length == 5 && currentWord.lowercase() in valid_list) {
                         val results = game.addGuess(currentWord)
 
                         guesses = game.guesses
@@ -64,7 +69,8 @@ fun main() = Window {
     }
 }
 
-fun List<String>.padEnd(n: Int, currentWord: String, value: String): List<String> =
-    if (size == n - 1) this + listOf(currentWord)
-    else if (size == n) this
-    else this + listOf(currentWord) + List(n - 1 - size) { value }
+fun List<String>.padEnd(n: Int, currentWord: String, value: String): List<String> = when (size) {
+    n - 1 -> this + listOf(currentWord)
+    n -> this
+    else -> this + listOf(currentWord) + List(n - 1 - size) { value }
+}
