@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import ui.EndScreen
 import ui.GameBoard
 import ui.Keyboard
+import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
@@ -22,7 +23,7 @@ val target = solution_list.random().uppercase()
 
 val game = WordleGame(target)
 
-fun getResource(path: String) = object {}::class.java.getResource(path)
+fun getResource(path: String): URL? = object {}::class.java.getResource(path)
 
 fun main() = Window(
     title = "Wordle",
