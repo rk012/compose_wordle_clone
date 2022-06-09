@@ -9,6 +9,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import io.github.rk012.wordle.Results
+import io.github.rk012.wordle.Wordlists.solutionList
+import io.github.rk012.wordle.Wordlists.validList
+import io.github.rk012.wordle.getFilter
 import ui.EndScreen
 import ui.GameBoard
 import ui.Keyboard
@@ -16,12 +21,16 @@ import java.net.URL
 import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
-val solution_list = getResource("wordlists/solution_list.txt")!!.readText().split("\r\n")
-val valid_list = getResource("wordlists/valid_list.txt")!!.readText().split("\r\n") + solution_list
-
-val target = solution_list.random().uppercase()
+val target = solutionList.random().uppercase()
 
 val game = WordleGame(target)
+
+val Results.color: Color
+    get() = when(this) {
+        Results.MATCHES -> Color.Green
+        Results.EXISTS -> Color.Yellow
+        Results.NONE -> Color.Gray
+    }
 
 fun getResource(path: String): URL? = object {}::class.java.getResource(path)
 
@@ -65,9 +74,9 @@ fun main() = Window(
                 enter = {
                     if (currentWord.length != 5) {
                         warningText = "Not enough letters"
-                    } else if (currentWord.lowercase() !in valid_list) {
+                    } else if (currentWord.lowercase() !in validList) {
                         warningText = "Not a valid word"
-                    } else if (hardMode && game.results != guesses.map { game.getFilter(it, currentWord) }) {
+                    } else if (hardMode && game.results != guesses.map { getFilter(it, currentWord) }) {
                         warningText = "Guess must use previous information"
                     } else {
                         warningText = ""
@@ -86,7 +95,7 @@ fun main() = Window(
                             finished = true
                         }
 
-                        if (results.all { it == WordleGame.Results.MATCHES }) {
+                        if (results.all { it == Results.MATCHES }) {
                             win = true
                             finished = true
                         }

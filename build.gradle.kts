@@ -14,10 +14,12 @@ repositories {
     jcenter()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    maven("https://jitpack.io")
 }
 
 dependencies {
     implementation(compose.desktop.currentOs)
+    implementation("com.github.rk012:WordleUtil:v1.0.0")
 }
 
 tasks.withType<KotlinCompile>() {

@@ -1,12 +1,7 @@
-import androidx.compose.ui.graphics.Color
+import io.github.rk012.wordle.Results
+import io.github.rk012.wordle.getFilter
 
 class WordleGame(private val target: String, val guesses: MutableList<String> = mutableListOf()) {
-    enum class Results(val color: Color) {
-        MATCHES(Color.Green),
-        EXISTS(Color.Yellow),
-        NONE(Color.Gray)
-    }
-
     val charColors: MutableMap<Char, Results> = mutableMapOf()
 
     val results: List<List<Results>>
@@ -27,31 +22,4 @@ class WordleGame(private val target: String, val guesses: MutableList<String> = 
 
         return filter
     }
-
-    fun getFilter(input: String, target: String): List<Results> {
-        val filter = MutableList(5) { Results.NONE }
-
-        val letterCount = mutableMapOf<Char, Int>()
-        target.forEach {
-            letterCount[it] = letterCount.getDefault(it) + 1
-        }
-
-        target.forEachIndexed { index, c ->
-            if (c == input[index]) {
-                filter[index] = Results.MATCHES
-                letterCount[c] = letterCount[c]!! - 1
-            }
-        }
-
-        target.forEachIndexed { index, _ ->
-            if (filter[index] != Results.MATCHES && letterCount.getDefault(input[index]) > 0) {
-                filter[index] = Results.EXISTS
-                letterCount[input[index]] = letterCount.getDefault(input[index]) - 1
-            }
-        }
-
-        return filter
-    }
-
-    private fun<T> Map<T, Int>.getDefault(key: T): Int = get(key) ?: 0
 }
